@@ -6,18 +6,19 @@
           <img class="logo" src="/static/images/logo.png">
           <div class="tagline">Task management tool</div>
         </div>
-        <form action="">
+        <form @submit.prevent="submitForm">
+          <div class="alert alert-danger failed" v-show="errorMessage">{{ errorMessage }}</div>
           <div class="form-group">
             <label for="username">Username</label>
-            <input type="text" class="form-control" id="username">
+            <input type="text" class="form-control" id="username" v-model="form.username">
           </div>
           <div class="form-group">
             <label for="emailAddress">Email Address</label>
-            <input type="email" class="form-control" id="emailAddress">
+            <input type="email" class="form-control" id="emailAddress" v-model="form.emailAddress">
           </div>
           <div class="form-group">
             <label for="password">Password</label>
-            <input type="password" class="form-control" id="password">
+            <input type="password" class="form-control" id="password" v-model="form.password">
           </div>
           <button type="submit" class="btn btn-primary btn-block">Create account</button>
           <p class="accept-terms text-muted">By clicking “Create account”, you agree to our <a href="#">terms of service</a> and <a href="#">privacy policy</a>.</p>
@@ -34,6 +35,36 @@
     </div>
   </div>
 </template>
+
+<script>
+import registrationService from '@/services/registration'
+
+export default {
+  name: 'RegisterPage',
+  data: function () {
+    return {
+      form: {
+        username: '',
+        emailAddress: '',
+        password: ''
+      },
+      errorMessage: ''
+    }
+  },
+  methods: {
+    submitForm () {
+      // TODO: validate the data
+      registrationService.register(this.form)
+        .then(() => {
+          this.$router.push({ name: 'LoginPage' })
+        })
+        .catch(error => {
+          this.errorMessage = 'Failed to register user. Reason: ' + (error.message ? error.message : 'Unknown') + '.'
+        })
+    }
+  }
+}
+</script>
 
 <style lang="scss" scoped>
 .container {max-width: 900px;}
