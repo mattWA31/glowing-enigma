@@ -76,7 +76,7 @@ export default {
     submitForm () {
       // Validate the data
       this.$v.$touch()
-      if(this.$v.$invalid){
+      if (this.$v.$invalid) {
         return
       }
 
