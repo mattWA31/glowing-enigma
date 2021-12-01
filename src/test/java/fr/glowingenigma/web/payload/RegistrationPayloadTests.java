@@ -34,7 +34,7 @@ public class RegistrationPayloadTests {
         RegistrationPayload payload = new RegistrationPayload();
         payload.setEmailAddress("BadEmailAddress");
         payload.setUsername("MyUsername");
-        payload.setPassword("MyPassword");
+        payload.setPassword("MyPassword!");
 
         Set<ConstraintViolation<RegistrationPayload>> violations = validator.validate(payload);
         assertEquals(1, violations.size());
@@ -52,7 +52,7 @@ public class RegistrationPayloadTests {
         RegistrationPayload payload = new RegistrationPayload();
         payload.setEmailAddress(localPart + "@" + domain + ".com");
         payload.setUsername("MyUsername");
-        payload.setPassword("MyPassword");
+        payload.setPassword("MyPassword!");
 
         Set<ConstraintViolation<RegistrationPayload>> violations = validator.validate(payload);
         assertEquals(1, violations.size());
@@ -63,8 +63,8 @@ public class RegistrationPayloadTests {
         RegistrationPayload payload = new RegistrationPayload();
         String usernameTooShort = RandomStringUtils.random(1);
         payload.setUsername(usernameTooShort);
-        payload.setPassword("MyPassword");
-        payload.setEmailAddress("blabla@localhost.com");
+        payload.setPassword("MyPassword!");
+        payload.setEmailAddress("blabla@glowingenigma.com");
 
         Set<ConstraintViolation<RegistrationPayload>> violations = validator.validate(payload);
         assertEquals(1, violations.size());
@@ -75,8 +75,8 @@ public class RegistrationPayloadTests {
         RegistrationPayload payload = new RegistrationPayload();
         String usernameTooLong = RandomStringUtils.random(51);
         payload.setUsername(usernameTooLong);
-        payload.setPassword("MyPassword");
-        payload.setEmailAddress("blabla@localhost.com");
+        payload.setPassword("MyPassword!");
+        payload.setEmailAddress("blabla@glowingenigma.com");
 
         Set<ConstraintViolation<RegistrationPayload>> violations = validator.validate(payload);
         assertEquals(1, violations.size());
@@ -88,7 +88,7 @@ public class RegistrationPayloadTests {
         String passwordTooShort = RandomStringUtils.random(5);
         payload.setUsername("MyUsername");
         payload.setPassword(passwordTooShort);
-        payload.setEmailAddress("blabla@localhost.com");
+        payload.setEmailAddress("blabla@glowingenigma.com");
 
         Set<ConstraintViolation<RegistrationPayload>> violations = validator.validate(payload);
         assertEquals(1, violations.size());
@@ -100,7 +100,7 @@ public class RegistrationPayloadTests {
         String passwordTooLong = RandomStringUtils.random(31);
         payload.setUsername("MyUsername");
         payload.setPassword(passwordTooLong);
-        payload.setEmailAddress("blabla@localhost.com");
+        payload.setEmailAddress("blabla@glowingenigma.com");
 
         Set<ConstraintViolation<RegistrationPayload>> violations = validator.validate(payload);
         assertEquals(1, violations.size());

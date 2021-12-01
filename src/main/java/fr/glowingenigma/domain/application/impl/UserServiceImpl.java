@@ -2,9 +2,15 @@ package fr.glowingenigma.domain.application.impl;
 
 import fr.glowingenigma.domain.application.UserService;
 import fr.glowingenigma.domain.application.commands.RegistrationCommand;
+import fr.glowingenigma.domain.common.event.DomainEventPublisher;
+import fr.glowingenigma.domain.common.mail.MailManager;
+import fr.glowingenigma.domain.common.mail.MessageVariable;
 import fr.glowingenigma.domain.model.user.RegistrationException;
 import fr.glowingenigma.domain.model.user.RegistrationManagement;
+import fr.glowingenigma.domain.model.user.User;
+import fr.glowingenigma.domain.model.user.event.UserRegisteredEvent;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import javax.transaction.Transactional;
 
@@ -12,18 +18,35 @@ import javax.transaction.Transactional;
 @Transactional
 public class UserServiceImpl implements UserService {
 
-    //private RegistrationManagement registrationManagement;
-    //private DomainEventPublisher domainEventPublisher;
-    //private MailManager mailManager;
+    private RegistrationManagement registrationManagement;
+    private DomainEventPublisher domainEventPublisher;
+    private MailManager mailManager;
 
-    //public UserServiceImpl(RegistrationManagement registrationManagement, DomainEventPublisher domainEventPublisher, MailManager mailManager) {
-    //    this.registrationManagement = registrationManagement;
-    //    this.domainEventPublisher = domainEventPublisher;
-    //    this.mailManager = mailManager;
-    //}
+    public UserServiceImpl(RegistrationManagement registrationManagement, DomainEventPublisher domainEventPublisher, MailManager mailManager) {
+        this.registrationManagement = registrationManagement;
+        this.domainEventPublisher = domainEventPublisher;
+        this.mailManager = mailManager;
+    }
 
     @Override
     public void register(RegistrationCommand command) throws RegistrationException {
+        Assert.notNull(command, "Parameter `command` must not be null");
+        User newUser = registrationManagement.register(
+                command.getUsername(),
+                command.getEmailAddress(),
+                command.getPassword()
+        );
 
+        sendWelcomeMessage(newUser);
+        domainEventPublisher.publish(new UserRegisteredEvent(newUser));
+    }
+
+    private void sendWelcomeMessage(User user) {
+        mailManager.send(
+                user.getEmailAddress(),
+                "Welcome to GlowingEnigma",
+                "welcome.ftl",
+                MessageVariable.from("user", user)
+        );
     }
 }

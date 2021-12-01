@@ -40,7 +40,7 @@ public class RegistrationApiControllerTests {
     public void register_existingUsername_shouldFailAndReturn400() throws Exception {
         RegistrationPayload payload = new RegistrationPayload();
         payload.setUsername("exist");
-        payload.setEmailAddress("blabla@localhost.com");
+        payload.setEmailAddress("blabla@glowingenigma.com");
         payload.setPassword("MyPassword!");
 
         doThrow(UsernameExistsException.class)
@@ -58,7 +58,7 @@ public class RegistrationApiControllerTests {
     public void register_existingEmailAddress_shouldFailAndReturn400() throws Exception {
         RegistrationPayload payload = new RegistrationPayload();
         payload.setUsername("test");
-        payload.setEmailAddress("exist@localhost.com");
+        payload.setEmailAddress("exist@glowingenigma.com");
         payload.setPassword("MyPassword!");
 
         doThrow(EmailAddressExistsException.class)
@@ -76,7 +76,7 @@ public class RegistrationApiControllerTests {
     public void register_validPayload_shouldSucceedAndReturn201() throws Exception {
         RegistrationPayload payload = new RegistrationPayload();
         payload.setUsername("test");
-        payload.setEmailAddress("blabla@localhost.com");
+        payload.setEmailAddress("blabla@glowingenigma.com");
         payload.setPassword("MyPassword!");
 
         doNothing().when(serviceMock).register(payload.toCommand());
